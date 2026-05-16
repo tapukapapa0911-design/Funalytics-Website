@@ -1,0 +1,1800 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Funalytics | Mutual Fund Intelligence</title>
+    <meta
+      name="description"
+      content="Funalytics ranks 600+ mutual funds across 19 SEBI categories using a research-backed scoring model for Indian investors."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Syne:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #070a12;
+        --bg-2: #0d1525;
+        --surface: rgba(16, 24, 40, 0.72);
+        --border: rgba(255, 255, 255, 0.09);
+        --text: #f1f5f9;
+        --muted: #94a3b8;
+        --accent: #5eead4;
+        --purple: #7b61ff;
+        --brand-gradient: linear-gradient(135deg, #7b61ff 0%, #5a4bff 55%, #00d1b2 100%);
+        --warn: #ffd166;
+        --motion: cubic-bezier(0.2, 0.9, 0.22, 1);
+      }
+
+      * {
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        overflow-x: hidden;
+        width: 100%;
+      }
+
+      html::-webkit-scrollbar,
+      body::-webkit-scrollbar {
+        display: none;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        width: 100%;
+        overflow-x: hidden;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "DM Sans", sans-serif;
+      }
+
+      body::before {
+        position: fixed;
+        inset: 0;
+        z-index: -3;
+        content: "";
+        background:
+          radial-gradient(circle at 12% 6%, rgba(94, 234, 212, 0.14), transparent 30rem),
+          radial-gradient(circle at 84% 18%, rgba(123, 97, 255, 0.16), transparent 32rem),
+          radial-gradient(circle at 50% 98%, rgba(0, 209, 178, 0.08), transparent 34rem),
+          var(--bg);
+      }
+
+      body::after {
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        pointer-events: none;
+        content: "";
+        opacity: 0.22;
+        background-image: radial-gradient(rgba(255, 255, 255, 0.32) 1px, transparent 1px);
+        background-size: 24px 24px;
+        mask-image: linear-gradient(to bottom, black, transparent 70%);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      img {
+        display: block;
+        max-width: 100%;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0 clamp(16px, 4vw, 48px);
+      }
+
+      .site-nav {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 100;
+        padding: 16px clamp(16px, 4vw, 48px);
+        background: transparent;
+        transition: background 220ms ease;
+      }
+
+      .site-nav.scrolled {
+        background: rgba(7, 10, 18, 0.82);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+      }
+
+      .nav-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 1120px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text);
+        text-decoration: none;
+      }
+
+      .brand img {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+      }
+
+      .brand .logo-light {
+        display: none;
+      }
+
+      .brand span {
+        font-family: "Syne", sans-serif;
+        font-size: 1.1rem;
+        font-weight: 800;
+        letter-spacing: 0.01em;
+        color: var(--text);
+      }
+
+      .nav-right-pill {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        overflow: hidden;
+        padding: 0;
+        border: 1px solid rgba(255, 255, 255, 0.13);
+        border-radius: 999px;
+        background: rgba(13, 21, 37, 0.7);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 0;
+      }
+
+      .nav-links a {
+        display: inline-flex;
+        align-items: center;
+        padding: 10px 18px;
+        color: var(--muted);
+        font-size: 0.82rem;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        transition: color 160ms ease;
+      }
+
+      .nav-links a:hover {
+        color: var(--text);
+      }
+
+      .nav-divider {
+        width: 1px;
+        height: 24px;
+        flex-shrink: 0;
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      .nav-cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: 5px;
+        padding: 8px 20px;
+        border: none;
+        border-radius: 999px;
+        color: white;
+        background: var(--brand-gradient);
+        box-shadow: 0 8px 24px rgba(123, 97, 255, 0.3);
+        font-family: "Syne", sans-serif;
+        font-size: 0.82rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: opacity 180ms ease, transform 180ms ease;
+      }
+
+      .nav-cta:hover {
+        opacity: 0.88;
+        transform: scale(1.02);
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 46px;
+        padding: 0 22px;
+        border-radius: 12px;
+        border: 1px solid transparent;
+        font: inherit;
+        font-weight: 500;
+        cursor: pointer;
+        transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, color 180ms ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .btn-primary {
+        color: white;
+        background: var(--brand-gradient);
+        box-shadow: 0 18px 40px rgba(123, 97, 255, 0.28);
+      }
+
+      .btn-primary:hover {
+        box-shadow: 0 22px 48px rgba(0, 209, 178, 0.22), 0 18px 40px rgba(123, 97, 255, 0.3);
+      }
+
+      .btn-ghost {
+        color: var(--text);
+        border-color: var(--border);
+        background: rgba(255, 255, 255, 0.035);
+        backdrop-filter: blur(12px);
+      }
+
+      .btn-ghost:hover {
+        border-color: rgba(94, 234, 212, 0.32);
+        color: var(--accent);
+      }
+
+      .hero {
+        position: relative;
+        min-height: 100svh;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        padding: clamp(100px, 14vh, 130px) 0 clamp(60px, 8vh, 90px);
+      }
+
+      .hero::before,
+      .hero::after {
+        position: absolute;
+        width: clamp(18rem, 50vw, 34rem);
+        height: clamp(18rem, 50vw, 34rem);
+        content: "";
+        pointer-events: none;
+        filter: blur(8px);
+        transition: transform 600ms ease;
+      }
+
+      .hero::before {
+        top: -13rem;
+        left: -11rem;
+        background: radial-gradient(circle, rgba(94, 234, 212, 0.28), transparent 68%);
+        transform: translate(calc(var(--mx, 0) * 24px), calc(var(--my, 0) * 24px));
+      }
+
+      .hero::after {
+        right: -12rem;
+        bottom: 3rem;
+        background: radial-gradient(circle, rgba(123, 97, 255, 0.3), transparent 68%);
+        transform: translate(calc(var(--mx, 0) * -28px), calc(var(--my, 0) * -28px));
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+        gap: clamp(32px, 5vw, 64px);
+        width: 100%;
+      }
+
+      .hero-copy,
+      .hero-visual {
+        position: relative;
+        z-index: 1;
+      }
+
+      .label-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        margin-bottom: 24px;
+        padding: 8px 14px;
+        border: 1px solid rgba(94, 234, 212, 0.22);
+        border-radius: 999px;
+        color: var(--accent);
+        background: rgba(94, 234, 212, 0.06);
+        font-size: 0.72rem;
+        font-weight: 500;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        backdrop-filter: blur(12px);
+      }
+
+      .label-pill::before {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        content: "";
+        background: var(--accent);
+        box-shadow: 0 0 12px rgba(94, 234, 212, 0.72);
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-family: "Syne", sans-serif;
+      }
+
+      h1 {
+        max-width: 640px;
+        margin: 0 0 20px;
+        font-size: clamp(2.8rem, 6vw, 5.2rem);
+        line-height: 1;
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        background: var(--brand-gradient);
+        background-clip: text;
+        color: transparent;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .hero-text {
+        max-width: 560px;
+        margin: 0 0 28px;
+        color: var(--muted);
+        font-size: clamp(0.95rem, 1.5vw, 1.06rem);
+        line-height: 1.72;
+      }
+
+      .cta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 28px;
+      }
+
+      .stat-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .stat-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 38px;
+        padding: 0 16px;
+        border: 1px solid rgba(94, 234, 212, 0.18);
+        border-radius: 999px;
+        background: rgba(94, 234, 212, 0.06);
+        color: var(--text);
+        font-size: 0.85rem;
+        font-weight: 500;
+        letter-spacing: 0.01em;
+        backdrop-filter: blur(12px);
+      }
+
+      .stat-pill::before {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        content: "";
+        background: var(--accent);
+        box-shadow: 0 0 8px rgba(94, 234, 212, 0.6);
+      }
+
+      .dashboard-preview {
+        position: relative;
+        overflow: hidden;
+        padding: 0 0 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        background: rgba(13, 21, 37, 0.78);
+        backdrop-filter: blur(28px);
+        box-shadow: 0 32px 80px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(94, 234, 212, 0.08);
+      }
+
+      .dashboard-preview::before {
+        position: absolute;
+        inset: 0;
+        content: "";
+        pointer-events: none;
+        background:
+          radial-gradient(circle at 80% 10%, rgba(123, 97, 255, 0.18), transparent 42%),
+          radial-gradient(circle at 10% 90%, rgba(94, 234, 212, 0.12), transparent 36%);
+      }
+
+      .dp-header,
+      .dp-category-bar,
+      .dp-top-label,
+      .dp-fund-list,
+      .dp-mini-row {
+        position: relative;
+      }
+
+      .dp-header {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 16px 20px 14px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      }
+
+      .dp-dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.18);
+      }
+
+      .dp-dot:nth-child(1) { background: #ff6058; }
+      .dp-dot:nth-child(2) { background: #ffbd2e; }
+      .dp-dot:nth-child(3) { background: #28c840; }
+
+      .dp-title {
+        margin-left: 8px;
+        color: var(--muted);
+        font-family: "Syne", sans-serif;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+      }
+
+      .dp-category-bar {
+        display: flex;
+        gap: 6px;
+        overflow-x: auto;
+        padding: 14px 18px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        scrollbar-width: none;
+      }
+
+      .dp-category-bar::-webkit-scrollbar {
+        display: none;
+      }
+
+      .dp-cat {
+        appearance: none;
+        cursor: pointer;
+        padding: 6px 14px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 999px;
+        color: var(--muted);
+        background: rgba(255, 255, 255, 0.04);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.76rem;
+        font-weight: 500;
+        white-space: nowrap;
+        transition: all 180ms ease;
+      }
+
+      .dp-cat.active {
+        border-color: rgba(94, 234, 212, 0.35);
+        color: var(--accent);
+        background: rgba(94, 234, 212, 0.1);
+      }
+
+      .dp-top-label {
+        padding: 14px 18px 8px;
+        color: var(--muted);
+        font-size: 0.72rem;
+        font-weight: 500;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+      }
+
+      .dp-fund-list {
+        display: grid;
+        gap: 8px;
+        padding: 0 14px;
+      }
+
+      .dp-fund {
+        display: grid;
+        grid-template-columns: 28px 1fr auto;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.03);
+        transition: border-color 180ms ease, background 180ms ease;
+      }
+
+      .dp-fund:hover {
+        border-color: rgba(94, 234, 212, 0.2);
+        background: rgba(94, 234, 212, 0.04);
+      }
+
+      .dp-rank {
+        color: var(--accent);
+        font-family: "Syne", sans-serif;
+        font-size: 0.72rem;
+        font-weight: 800;
+      }
+
+      .rank-2 .dp-rank { color: #c0c8d8; }
+      .rank-3 .dp-rank { color: var(--warn); }
+
+      .dp-fund-info strong {
+        display: block;
+        font-family: "Syne", sans-serif;
+        font-size: 0.86rem;
+        font-weight: 700;
+        line-height: 1.2;
+      }
+
+      .dp-fund-info span {
+        color: var(--muted);
+        font-size: 0.72rem;
+      }
+
+      .dp-score-bar {
+        overflow: hidden;
+        width: 80px;
+        height: 5px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .dp-score-fill {
+        width: var(--fill);
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #7b61ff, #00d1b2);
+      }
+
+      .dp-mini-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        padding: 12px 14px 0;
+      }
+
+      .dp-mini-card {
+        padding: 10px 12px;
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .dp-mini-label {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--muted);
+        font-size: 0.68rem;
+        letter-spacing: 0.04em;
+      }
+
+      .dp-mini-val {
+        font-family: "Syne", sans-serif;
+        font-size: 1.05rem;
+        font-weight: 800;
+        background: var(--brand-gradient);
+        background-clip: text;
+        color: transparent;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .ticker {
+        overflow: hidden;
+        white-space: nowrap;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        background: var(--bg-2);
+      }
+
+      .ticker-track {
+        display: flex;
+        width: max-content;
+        animation: ticker-scroll 30s linear infinite;
+      }
+
+      .ticker-track.reverse {
+        animation-name: ticker-scroll-reverse;
+        animation-duration: 34s;
+      }
+
+      .ticker:hover .ticker-track {
+        animation-play-state: paused;
+      }
+
+      .ticker span {
+        padding: 13px 0;
+        color: var(--muted);
+        font-family: "Syne", sans-serif;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .ticker b {
+        color: var(--accent);
+        font-weight: 700;
+      }
+
+      @keyframes ticker-scroll {
+        to {
+          transform: translateX(-33.333%);
+        }
+      }
+
+      @keyframes ticker-scroll-reverse {
+        from {
+          transform: translateX(-33.333%);
+        }
+
+        to {
+          transform: translateX(0);
+        }
+      }
+
+      .section {
+        padding: clamp(56px, 9vw, 100px) 0;
+      }
+
+      .section-heading {
+        max-width: 760px;
+        margin-bottom: 42px;
+      }
+
+      .section-label {
+        margin: 0 0 12px;
+        color: var(--accent);
+        font-size: 0.78rem;
+        font-weight: 500;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+      }
+
+      .section-heading h2,
+      .final-cta h2 {
+        margin: 0;
+        font-size: clamp(2rem, 5.5vw, 3.8rem);
+        line-height: 1.02;
+        font-weight: 800;
+        letter-spacing: -0.035em;
+      }
+
+      .bento-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .feature-card {
+        display: flex;
+        flex-direction: column;
+        min-height: auto;
+        padding: clamp(20px, 3vw, 28px);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        background: var(--surface);
+        backdrop-filter: blur(22px);
+        transition: transform 200ms var(--motion), border-color 200ms ease, box-shadow 200ms ease;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-3px);
+        border-color: rgba(94, 234, 212, 0.3);
+        box-shadow: 0 22px 55px rgba(94, 234, 212, 0.09);
+      }
+
+      .feature-icon {
+        width: 38px;
+        height: 38px;
+        margin-bottom: 18px;
+      }
+
+      .feature-card h3 {
+        margin: 0 0 10px;
+        font-size: 1.25rem;
+      }
+
+      .feature-card p {
+        margin: 0 0 24px;
+        color: var(--muted);
+        font-size: 0.95rem;
+        line-height: 1.66;
+      }
+
+      .tag {
+        align-self: flex-start;
+        margin-top: auto;
+        padding: 7px 10px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 9px;
+        color: var(--accent);
+        background: rgba(255, 255, 255, 0.035);
+        font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+        font-size: 0.78rem;
+      }
+
+      .steps {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .step-card {
+        position: relative;
+        z-index: 1;
+        padding: 24px;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        background: rgba(16, 24, 40, 0.6);
+        backdrop-filter: blur(18px);
+      }
+
+      .step-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        margin-bottom: 18px;
+        border-radius: 50%;
+        color: white;
+        background: var(--brand-gradient);
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+      }
+
+      .step-card h3 {
+        margin: 0 0 8px;
+        font-size: 1.15rem;
+      }
+
+      .step-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.94rem;
+        line-height: 1.66;
+      }
+
+      .metrics-strip {
+        padding: clamp(28px, 5vw, 48px) clamp(20px, 4vw, 42px);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        background: rgba(16, 24, 40, 0.54);
+        backdrop-filter: blur(22px);
+      }
+
+      .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: clamp(14px, 3vw, 24px);
+        text-align: center;
+      }
+
+      .metric-stat strong {
+        display: block;
+        font-family: "Syne", sans-serif;
+        font-size: clamp(2.2rem, 7vw, 3.5rem);
+        font-weight: 800;
+        line-height: 1;
+        background: var(--brand-gradient);
+        background-clip: text;
+        color: transparent;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .metric-stat span {
+        display: block;
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: clamp(0.75rem, 2vw, 0.88rem);
+      }
+
+      .faq-section {
+        border-top: 1px solid var(--border);
+      }
+
+      .faq-layout {
+        display: flex;
+        align-items: flex-start;
+        gap: clamp(48px, 5vw, 72px);
+      }
+
+      .faq-left {
+        position: sticky;
+        top: 90px;
+        flex-shrink: 0;
+        width: clamp(300px, 26vw, 360px);
+        overflow: visible;
+      }
+
+      .faq-heading {
+        display: block;
+        margin: 0 0 14px;
+        font-family: "Syne", sans-serif;
+        font-size: clamp(3rem, 6vw, 4.5rem);
+        font-weight: 800;
+        line-height: 1.24;
+        letter-spacing: -0.02em;
+        padding: 0 0.02em 0.2em 0;
+        overflow: visible;
+        background: var(--brand-gradient);
+        background-clip: text;
+        color: transparent;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .faq-sub {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.92rem;
+        line-height: 1.7;
+      }
+
+      .faq-right {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .faq-item {
+        border-top: 1px solid var(--border);
+      }
+
+      .faq-item:last-child {
+        border-bottom: 1px solid var(--border);
+      }
+
+      .faq-q {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        width: 100%;
+        padding: 22px 0;
+        border: none;
+        color: var(--text);
+        background: none;
+        font-family: "DM Sans", sans-serif;
+        font-size: 1rem;
+        font-weight: 500;
+        text-align: left;
+        cursor: pointer;
+        transition: color 160ms ease;
+      }
+
+      .faq-q:hover {
+        color: var(--accent);
+      }
+
+      .faq-icon {
+        flex-shrink: 0;
+        color: var(--muted);
+        font-size: 1.4rem;
+        font-weight: 300;
+        line-height: 1;
+        transition: transform 260ms var(--motion), color 160ms ease;
+      }
+
+      .faq-item.open .faq-icon {
+        color: var(--accent);
+        transform: rotate(45deg);
+      }
+
+      .faq-a {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 360ms ease, padding-bottom 360ms ease;
+      }
+
+      .faq-item.open .faq-a {
+        max-height: 300px;
+        padding-bottom: 22px;
+      }
+
+      .faq-a p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.92rem;
+        line-height: 1.75;
+      }
+
+      .final-section {
+        padding: clamp(48px, 8vw, 110px) 0;
+      }
+
+      .final-cta {
+        position: relative;
+        overflow: hidden;
+        padding: clamp(48px, 8vw, 80px) clamp(20px, 5vw, 60px);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        text-align: center;
+        background: var(--surface);
+        backdrop-filter: blur(22px);
+      }
+
+      .final-cta::before {
+        position: absolute;
+        inset: -40%;
+        content: "";
+        pointer-events: none;
+        background: radial-gradient(circle at center, rgba(123, 97, 255, 0.24), transparent 42%);
+      }
+
+      .final-cta > * {
+        position: relative;
+      }
+
+      .final-cta p {
+        max-width: 640px;
+        margin: 18px auto 26px;
+        color: var(--muted);
+        font-size: clamp(0.92rem, 2vw, 1.04rem);
+        line-height: 1.7;
+      }
+
+      .final-cta .btn-primary {
+        min-height: 52px;
+        padding: 0 clamp(24px, 5vw, 42px);
+        font-size: 0.96rem;
+      }
+
+      .site-footer {
+        padding: 36px 0;
+        border-top: 1px solid var(--border);
+        background: rgba(7, 10, 18, 0.72);
+      }
+
+      .footer-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
+
+      .footer-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .footer-brand img {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+      }
+
+      .footer-brand p {
+        margin: 4px 0 0;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .footer-links {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 14px;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .footer-links a:hover {
+        color: var(--accent);
+      }
+
+      .footer-bottom {
+        margin-top: 28px;
+        padding-top: 18px;
+        border-top: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(32px);
+        will-change: opacity, transform;
+        transition:
+          opacity 680ms cubic-bezier(0.16, 1, 0.3, 1),
+          transform 680ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .reveal.in-view {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .hero-copy.reveal { transition-delay: 0ms; }
+      .hero-visual.reveal { transition-delay: 140ms; }
+      .bento-grid .feature-card:nth-child(1) { transition-delay: 60ms; }
+      .bento-grid .feature-card:nth-child(2) { transition-delay: 150ms; }
+      .bento-grid .feature-card:nth-child(3) { transition-delay: 240ms; }
+      .steps .step-card:nth-child(1) { transition-delay: 60ms; }
+      .steps .step-card:nth-child(2) { transition-delay: 150ms; }
+      .steps .step-card:nth-child(3) { transition-delay: 240ms; }
+
+      @media (min-width: 560px) and (max-width: 767px) {
+        .bento-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .bento-grid .feature-card:last-child {
+          grid-column: 1 / -1;
+        }
+      }
+
+      @media (min-width: 768px) {
+        .bento-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+
+        .steps {
+          flex-direction: row;
+          gap: 18px;
+        }
+
+        .steps::before {
+          position: absolute;
+          top: 45px;
+          right: 8%;
+          left: 8%;
+          content: "";
+          border-top: 1px dashed rgba(94, 234, 212, 0.4);
+        }
+
+        .step-card {
+          flex: 1;
+        }
+
+        .metrics-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      @media (max-width: 767px) {
+        .container {
+          max-width: 100%;
+          padding: 0 20px;
+          overflow: hidden;
+        }
+
+        .faq-section .container {
+          overflow: visible;
+        }
+
+        .site-nav {
+          padding-inline: 14px;
+        }
+
+        .nav-inner {
+          justify-content: flex-start;
+          gap: clamp(24px, 8vw, 56px);
+        }
+
+        .brand {
+          gap: 8px;
+          min-width: 0;
+        }
+
+        .brand img {
+          width: 32px;
+          height: 32px;
+        }
+
+        .brand span {
+          font-size: 0.98rem;
+          letter-spacing: 0;
+        }
+
+        .nav-links {
+          display: none;
+        }
+
+        .nav-divider {
+          display: none;
+        }
+
+        .nav-right-pill {
+          border: none;
+          background: transparent;
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
+          padding: 0;
+        }
+
+        .nav-cta {
+          padding: 8px 16px;
+          font-size: 0.78rem;
+        }
+
+        .hero {
+          min-height: auto;
+          padding-top: 90px;
+          padding-bottom: 48px;
+        }
+
+        .hero-grid {
+          grid-template-columns: 1fr;
+          gap: 40px;
+          max-width: 100%;
+        }
+
+        .hero-copy {
+          width: 100%;
+          max-width: 100%;
+          overflow: hidden;
+        }
+
+        h1 {
+          max-width: 100%;
+          font-size: clamp(1.9rem, 6.4vw, 2.38rem);
+          line-height: 1;
+          letter-spacing: -0.02em;
+        }
+
+        .hero-text {
+          max-width: 100%;
+          font-size: 0.98rem;
+        }
+
+        .cta-row {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 10px;
+          width: 100%;
+          max-width: 100%;
+          overflow: hidden;
+        }
+
+        .cta-row .btn {
+          width: auto;
+          max-width: 100%;
+          min-width: 0;
+          flex: none;
+          justify-content: center;
+          min-height: 46px;
+          font-size: 0.9rem;
+        }
+
+        .stat-pill {
+          min-height: 34px;
+          padding: 0 12px;
+          font-size: 0.8rem;
+        }
+
+        .hero-visual,
+        .dashboard-preview {
+          width: 100%;
+          max-width: 100%;
+          overflow: hidden;
+        }
+
+        .label-pill {
+          font-size: 0.68rem;
+        }
+
+          .dp-fund {
+            grid-template-columns: 24px 1fr;
+            gap: 8px;
+          }
+
+          .dp-score-bar {
+            display: none;
+          }
+
+        .dp-fund-info strong {
+          font-size: 0.8rem;
+        }
+
+        .dp-mini-row {
+          grid-template-columns: repeat(3, 1fr);
+          gap: 6px;
+          padding: 10px 12px 0;
+        }
+
+        .dp-mini-card {
+          min-width: 0;
+          padding: 8px 10px;
+        }
+
+        .dp-mini-val {
+          font-size: 0.9rem;
+        }
+
+        .dp-mini-label {
+          overflow: hidden;
+          font-size: 0.62rem;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .feature-card {
+          min-height: 0;
+          padding: 20px;
+        }
+
+        .feature-icon {
+          margin-bottom: 16px;
+        }
+
+        .feature-card h3 {
+          margin-bottom: 10px;
+          font-size: 1.1rem;
+        }
+
+        .feature-card p {
+          font-size: 0.9rem;
+        }
+
+        .steps {
+          gap: 12px;
+        }
+
+        .steps::before {
+          display: none;
+        }
+
+        .step-card {
+          padding: 20px;
+        }
+
+        .step-number {
+          width: 36px;
+          height: 36px;
+          margin-bottom: 14px;
+          font-size: 0.9rem;
+        }
+
+        .step-card h3 {
+          margin-bottom: 8px;
+          font-size: 1.05rem;
+        }
+
+        .step-card p {
+          font-size: 0.9rem;
+        }
+
+        .faq-layout {
+          flex-direction: column;
+          gap: 32px;
+        }
+
+        .faq-left {
+          position: static;
+          width: 100%;
+        }
+
+        .faq-heading {
+          font-size: clamp(2.4rem, 10vw, 3.5rem);
+        }
+
+        .footer-top {
+          flex-direction: column;
+          gap: 24px;
+        }
+
+        .footer-links {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+          font-size: 0.85rem;
+        }
+
+        .footer-bottom {
+          font-size: 0.8rem;
+          text-align: center;
+        }
+
+        .site-footer {
+          padding: 28px 0;
+        }
+      }
+
+      @media (max-width: 390px) {
+        h1 {
+          font-size: clamp(1.85rem, 6.2vw, 2.25rem);
+        }
+
+        .cta-row .btn {
+          flex: 1 1 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <div class="nav-inner">
+        <a class="brand" href="#top" aria-label="Funalytics home">
+          <img src="funalytics-logo-dark.png" alt="Funalytics logo" width="36" height="36" />
+          <span>FUNALYTICS</span>
+        </a>
+        <div class="nav-right-pill">
+          <nav class="nav-links" aria-label="Page sections">
+            <a href="#features">FEATURES</a>
+            <a href="#how">HOW IT WORKS</a>
+            <a href="#about">ABOUT</a>
+            <a href="#faq">FAQ</a>
+          </nav>
+          <div class="nav-divider" aria-hidden="true"></div>
+          <a class="nav-cta" href="https://funalytics-app.vercel.app/" target="_blank" rel="noreferrer">OPEN APP &rarr;</a>
+        </div>
+      </div>
+    </nav>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="container hero-grid">
+          <div class="hero-copy reveal">
+            <div class="label-pill">Mutual Fund Intelligence</div>
+            <h1 id="hero-title">Fund smarter.<br />Not harder.</h1>
+            <p class="hero-text">
+              Funalytics ranks 600+ mutual funds across 19 SEBI categories using a research-backed scoring model covering
+              returns, consistency, risk-adjusted performance, and valuation. All in one clean dashboard.
+            </p>
+            <div class="cta-row">
+              <a class="btn btn-primary" href="https://funalytics-app.vercel.app/" target="_blank" rel="noreferrer">Open App &rarr;</a>
+              <a class="btn btn-ghost" href="#how">See how it works</a>
+            </div>
+            <div class="stat-pills" aria-label="Funalytics quick stats">
+              <span class="stat-pill">600+ Funds</span>
+              <span class="stat-pill">19 Categories</span>
+              <span class="stat-pill">Live NAV</span>
+              <span class="stat-pill">Free to Use</span>
+            </div>
+          </div>
+
+          <div class="hero-visual reveal">
+            <div class="dashboard-preview">
+              <div class="dp-header">
+                <span class="dp-dot"></span><span class="dp-dot"></span><span class="dp-dot"></span>
+                <span class="dp-title">Funalytics Dashboard</span>
+              </div>
+              <div class="dp-category-bar" role="tablist" aria-label="Fund category preview">
+                <button class="dp-cat active" type="button" data-category="large">Large Cap</button>
+                <button class="dp-cat" type="button" data-category="mid">Mid Cap</button>
+                <button class="dp-cat" type="button" data-category="small">Small Cap</button>
+                <button class="dp-cat" type="button" data-category="multi">Multi Cap</button>
+                <button class="dp-cat" type="button" data-category="flexi">Flexi Cap</button>
+              </div>
+              <div class="dp-top-label" data-dashboard-label>Top Performers &middot; Large Cap</div>
+              <div class="dp-fund-list" data-dashboard-funds></div>
+              <div class="dp-mini-row">
+                <div class="dp-mini-card">
+                  <span class="dp-mini-label">Consistency</span>
+                  <strong class="dp-mini-val" data-dashboard-avg>76%</strong>
+                </div>
+                <div class="dp-mini-card">
+                  <span class="dp-mini-label">Top Sharpe</span>
+                  <strong class="dp-mini-val" data-dashboard-sharpe>0.57</strong>
+                </div>
+                <div class="dp-mini-card">
+                  <span class="dp-mini-label">Funds Ranked</span>
+                  <strong class="dp-mini-val" data-dashboard-count>33</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="ticker reveal" aria-label="Fund categories ticker">
+        <div class="ticker-track">
+          <span>LARGE CAP <b>&middot;</b> SMALL CAP <b>&middot;</b> FLEXI CAP <b>&middot;</b> ELSS <b>&middot;</b> BALANCED ADVANTAGE <b>&middot;</b> DEBT <b>&middot;</b> HYBRID <b>&middot;</b> INDEX FUNDS <b>&middot;</b> MID CAP <b>&middot;</b> OVERNIGHT FUNDS <b>&middot;</b> LIQUID FUNDS <b>&middot;</b> GILT <b>&middot;</b> SECTORAL <b>&middot;</b>&nbsp;</span>
+          <span>LARGE CAP <b>&middot;</b> SMALL CAP <b>&middot;</b> FLEXI CAP <b>&middot;</b> ELSS <b>&middot;</b> BALANCED ADVANTAGE <b>&middot;</b> DEBT <b>&middot;</b> HYBRID <b>&middot;</b> INDEX FUNDS <b>&middot;</b> MID CAP <b>&middot;</b> OVERNIGHT FUNDS <b>&middot;</b> LIQUID FUNDS <b>&middot;</b> GILT <b>&middot;</b> SECTORAL <b>&middot;</b>&nbsp;</span>
+          <span>LARGE CAP <b>&middot;</b> SMALL CAP <b>&middot;</b> FLEXI CAP <b>&middot;</b> ELSS <b>&middot;</b> BALANCED ADVANTAGE <b>&middot;</b> DEBT <b>&middot;</b> HYBRID <b>&middot;</b> INDEX FUNDS <b>&middot;</b> MID CAP <b>&middot;</b> OVERNIGHT FUNDS <b>&middot;</b> LIQUID FUNDS <b>&middot;</b> GILT <b>&middot;</b> SECTORAL <b>&middot;</b>&nbsp;</span>
+        </div>
+        <div class="ticker-track reverse" aria-hidden="true">
+          <span>LARGE CAP <b>&middot;</b> SMALL CAP <b>&middot;</b> FLEXI CAP <b>&middot;</b> ELSS <b>&middot;</b> BALANCED ADVANTAGE <b>&middot;</b> DEBT <b>&middot;</b> HYBRID <b>&middot;</b> INDEX FUNDS <b>&middot;</b> MID CAP <b>&middot;</b> OVERNIGHT FUNDS <b>&middot;</b> LIQUID FUNDS <b>&middot;</b> GILT <b>&middot;</b> SECTORAL <b>&middot;</b>&nbsp;</span>
+          <span>LARGE CAP <b>&middot;</b> SMALL CAP <b>&middot;</b> FLEXI CAP <b>&middot;</b> ELSS <b>&middot;</b> BALANCED ADVANTAGE <b>&middot;</b> DEBT <b>&middot;</b> HYBRID <b>&middot;</b> INDEX FUNDS <b>&middot;</b> MID CAP <b>&middot;</b> OVERNIGHT FUNDS <b>&middot;</b> LIQUID FUNDS <b>&middot;</b> GILT <b>&middot;</b> SECTORAL <b>&middot;</b>&nbsp;</span>
+          <span>LARGE CAP <b>&middot;</b> SMALL CAP <b>&middot;</b> FLEXI CAP <b>&middot;</b> ELSS <b>&middot;</b> BALANCED ADVANTAGE <b>&middot;</b> DEBT <b>&middot;</b> HYBRID <b>&middot;</b> INDEX FUNDS <b>&middot;</b> MID CAP <b>&middot;</b> OVERNIGHT FUNDS <b>&middot;</b> LIQUID FUNDS <b>&middot;</b> GILT <b>&middot;</b> SECTORAL <b>&middot;</b>&nbsp;</span>
+        </div>
+      </section>
+
+      <section class="section" id="features">
+        <div class="container">
+          <div class="section-heading reveal">
+            <p class="section-label">What it does</p>
+            <h2>Everything you need to pick the right fund.</h2>
+          </div>
+          <div class="bento-grid">
+            <article class="feature-card reveal">
+              <svg class="feature-icon" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                <rect x="5" y="16" width="5" height="10" rx="2" fill="#5EEAD4" />
+                <rect x="14" y="9" width="5" height="17" rx="2" fill="#5EEAD4" opacity="0.72" />
+                <rect x="23" y="5" width="5" height="21" rx="2" fill="#7B61FF" />
+              </svg>
+              <h3>Category Lens</h3>
+              <p>Start with the SEBI category that fits your goal, then see the strongest funds inside that exact mandate. Cleaner shortlists, fewer random comparisons.</p>
+              <span class="tag">19 Categories</span>
+            </article>
+            <article class="feature-card reveal">
+              <svg class="feature-icon" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                <circle cx="16" cy="16" r="11" stroke="#7B61FF" stroke-width="3" />
+                <circle cx="16" cy="16" r="4" fill="#7B61FF" />
+                <path d="M16 4V1M16 31v-3M28 16h3M1 16h3" stroke="#5EEAD4" stroke-width="2" stroke-linecap="round" />
+              </svg>
+              <h3>Investment Planner</h3>
+              <p>Enter your SIP, time horizon, and risk appetite. Get a category-wise portfolio allocation in seconds.</p>
+              <span class="tag">SIP &middot; Lumpsum</span>
+            </article>
+            <article class="feature-card reveal">
+              <svg class="feature-icon" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                <defs>
+                  <linearGradient id="compareGrad" x1="3" x2="29" y1="5" y2="27">
+                    <stop stop-color="#7B61FF" />
+                    <stop offset="1" stop-color="#00D1B2" />
+                  </linearGradient>
+                </defs>
+                <path d="M6 10h18M20 6l4 4-4 4M26 22H8M12 18l-4 4 4 4" stroke="url(#compareGrad)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <h3>Compare Funds</h3>
+              <p>Pick any two funds in a category and compare side-by-side across all metrics. No spreadsheets needed.</p>
+              <span class="tag">Side by side</span>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="how">
+        <div class="container">
+          <div class="section-heading reveal">
+            <p class="section-label">How it works</p>
+            <h2>Three steps to your next fund decision.</h2>
+          </div>
+          <div class="steps">
+            <article class="step-card reveal">
+              <span class="step-number">1</span>
+              <h3>Browse</h3>
+              <p>Pick a SEBI category &mdash; Large Cap, Small Cap, ELSS, Hybrid, and 15 more.</p>
+            </article>
+            <article class="step-card reveal">
+              <span class="step-number">2</span>
+              <h3>Rank</h3>
+              <p>Funds are scored and sorted by Funalytics Score. See who leads, who's consistent, who's risky.</p>
+            </article>
+            <article class="step-card reveal">
+              <span class="step-number">3</span>
+              <h3>Plan</h3>
+              <p>Run the Investment Planner. Enter your SIP and horizon. Get a full portfolio in seconds.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="about">
+        <div class="container">
+          <div class="metrics-strip reveal">
+            <div class="metrics-grid">
+              <div class="metric-stat">
+                <strong data-count="600" data-suffix="+">0</strong>
+                <span>Funds Tracked</span>
+              </div>
+              <div class="metric-stat">
+                <strong data-count="19">0</strong>
+                <span>SEBI Categories</span>
+              </div>
+              <div class="metric-stat">
+                <strong data-count="100" data-suffix="%">0</strong>
+                <span>Free to Use</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section faq-section" id="faq">
+        <div class="container">
+          <div class="faq-layout">
+            <div class="faq-left reveal">
+              <p class="section-label">Got questions</p>
+              <h2 class="faq-heading">FAQ</h2>
+              <p class="faq-sub">Everything you need to know about Funalytics, the scoring model, and the tools.</p>
+            </div>
+            <div class="faq-right">
+              <div class="faq-item reveal">
+                <button class="faq-q" aria-expanded="false">
+                  <span>What is Funalytics?</span>
+                  <span class="faq-icon" aria-hidden="true">+</span>
+                </button>
+                <div class="faq-a">
+                  <p>Funalytics is a free mutual fund analytics platform that scores and ranks 600+ SEBI-registered funds across 19 categories using a research-backed model covering returns, risk-adjusted performance, and valuation. It also includes an Investment Planner and a Fund Comparison tool.</p>
+                </div>
+              </div>
+              <div class="faq-item reveal">
+                <button class="faq-q" aria-expanded="false">
+                  <span>Is Funalytics completely free?</span>
+                  <span class="faq-icon" aria-hidden="true">+</span>
+                </button>
+                <div class="faq-a">
+                  <p>Yes, completely free. No login required, no subscription, no paywall. Open the app and start exploring immediately.</p>
+                </div>
+              </div>
+              <div class="faq-item reveal">
+                <button class="faq-q" aria-expanded="false">
+                  <span>How is the Funalytics Score calculated?</span>
+                  <span class="faq-icon" aria-hidden="true">+</span>
+                </button>
+                <div class="faq-a">
+                  <p>Each fund is evaluated within its SEBI category and weighted to produce a final score out of 100. Higher scores indicate stronger risk-adjusted returns combined with better valuation metrics.</p>
+                </div>
+              </div>
+              <div class="faq-item reveal">
+                <button class="faq-q" aria-expanded="false">
+                  <span>What does the Investment Planner do?</span>
+                  <span class="faq-icon" aria-hidden="true">+</span>
+                </button>
+                <div class="faq-a">
+                  <p>The Investment Planner takes your monthly SIP or lumpsum amount, time horizon, and risk appetite, then outputs a category-wise portfolio allocation &mdash; across Large Cap, Mid Cap, ELSS, Hybrid, Debt, and more &mdash; tailored to your goals.</p>
+                </div>
+              </div>
+              <div class="faq-item reveal">
+                <button class="faq-q" aria-expanded="false">
+                  <span>Who built Funalytics?</span>
+                  <span class="faq-icon" aria-hidden="true">+</span>
+                </button>
+                <div class="faq-a">
+                  <p>Funalytics was built by Ameen Khan, an MBA Finance student at IBS Mumbai, during a Summer Internship Programme at a SEBI-registered mutual fund distributor. It was designed to solve real fund-selection friction for retail investors.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="final-section">
+        <div class="container">
+          <div class="final-cta reveal">
+            <h2>Built for the investor who wants clarity, not clutter.</h2>
+            <p>
+              Funalytics was built as part of an MBA Finance research project at IBS Mumbai &mdash; and designed to solve real
+              decision-making friction.
+            </p>
+            <a class="btn btn-primary" href="https://funalytics-app.vercel.app/" target="_blank" rel="noreferrer">Launch Funalytics &rarr;</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-top">
+          <div>
+            <div class="footer-brand">
+              <img src="funalytics-logo-dark.png" alt="Funalytics logo" width="40" height="40" />
+              <strong>Funalytics</strong>
+            </div>
+            <p style="color: var(--muted); font-size: 0.88rem; margin: 10px 0 0;">Mutual fund intelligence, simplified.</p>
+          </div>
+          <div class="footer-links">
+            <a href="https://funalytics-app.vercel.app/" target="_blank" rel="noreferrer">App</a>
+            <a href="#features">Features</a>
+            <a href="#how">How it works</a>
+            <a href="#faq">FAQ</a>
+            <a href="mailto:bestinthebiz0911@gmail.com">bestinthebiz0911@gmail.com</a>
+          </div>
+        </div>
+        <div class="footer-bottom">&copy; 2026 Funalytics &middot; Developed by Ameen Khan</div>
+      </div>
+    </footer>
+
+    <script>
+      const nav = document.querySelector(".site-nav");
+      if ("scrollRestoration" in history) {
+        history.scrollRestoration = "manual";
+      }
+
+      window.addEventListener("pageshow", () => {
+        window.scrollTo(0, 0);
+      });
+
+      const hero = document.querySelector(".hero");
+
+      function updateNav() {
+        nav.classList.toggle("scrolled", window.scrollY > 60);
+      }
+
+      updateNav();
+      window.addEventListener("scroll", updateNav, { passive: true });
+
+      window.addEventListener("mousemove", (event) => {
+        if (!hero) return;
+        const mx = event.clientX / window.innerWidth - 0.5;
+        const my = event.clientY / window.innerHeight - 0.5;
+        hero.style.setProperty("--mx", mx.toFixed(3));
+        hero.style.setProperty("--my", my.toFixed(3));
+      });
+
+      const revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("in-view");
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+
+      document.querySelectorAll(".reveal").forEach((element) => revealObserver.observe(element));
+
+      const counterObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting || entry.target.dataset.counted) return;
+            entry.target.dataset.counted = "true";
+            const counters = entry.target.querySelectorAll("[data-count]");
+            counters.forEach((counter) => {
+              const target = Number(counter.dataset.count);
+              const suffix = counter.dataset.suffix || "";
+              const duration = 1500;
+              const start = performance.now();
+
+              function tick(now) {
+                const progress = Math.min((now - start) / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 4);
+                counter.textContent = Math.round(target * eased) + suffix;
+                if (progress < 1) requestAnimationFrame(tick);
+              }
+
+              requestAnimationFrame(tick);
+            });
+          });
+        },
+        { threshold: 0.35 }
+      );
+
+      document.querySelectorAll(".metrics-strip").forEach((strip) => counterObserver.observe(strip));
+
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (event) {
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            event.preventDefault();
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        });
+      });
+
+      document.querySelectorAll(".faq-q").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const item = btn.closest(".faq-item");
+          const isOpen = item.classList.contains("open");
+          document.querySelectorAll(".faq-item.open").forEach((element) => {
+            element.classList.remove("open");
+            element.querySelector(".faq-q").setAttribute("aria-expanded", "false");
+          });
+          if (!isOpen) {
+            item.classList.add("open");
+            btn.setAttribute("aria-expanded", "true");
+          }
+        });
+      });
+
+      const dashboardData = {
+        large: {
+          label: "Large Cap",
+          avg: "76%",
+          sharpe: "0.57",
+          count: "33",
+          funds: [
+            { name: "ICICI Pru Large Cap Fund", score: 76 },
+            { name: "Invesco India Largecap Fund", score: 71 },
+            { name: "DSP Large Cap Fund", score: 70 }
+          ]
+        },
+        mid: {
+          label: "Mid Cap",
+          avg: "88%",
+          sharpe: "0.93",
+          count: "29",
+          funds: [
+            { name: "Motilal Oswal Midcap Fund", score: 88 },
+            { name: "Edelweiss Mid Cap Fund", score: 82 },
+            { name: "HDFC Mid-Cap Opportunities", score: 80 }
+          ]
+        },
+        small: {
+          label: "Small Cap",
+          avg: "85%",
+          sharpe: "1.04",
+          count: "33",
+          funds: [
+            { name: "Bandhan Small Cap Fund", score: 85 },
+            { name: "Nippon India Small Cap Fund", score: 76 },
+            { name: "Tata Small Cap Fund", score: 73 }
+          ]
+        },
+        multi: {
+          label: "Multi Cap",
+          avg: "86%",
+          sharpe: "0.91",
+          count: "23",
+          funds: [
+            { name: "Nippon India Multi Cap Fund", score: 86 },
+            { name: "ICICI Pru Multi-Asset Fund", score: 82 },
+            { name: "Quant Active Fund", score: 79 }
+          ]
+        },
+        flexi: {
+          label: "Flexi Cap",
+          avg: "93%",
+          sharpe: "0.88",
+          count: "44",
+          funds: [
+            { name: "Parag Parikh Flexi Cap Fund", score: 93 },
+            { name: "Bank of India Flexi Cap Fund", score: 84 },
+            { name: "HDFC Flexi Cap Fund", score: 80 }
+          ]
+        }
+      };
+
+      function renderDashboardCategory(key) {
+        const data = dashboardData[key] || dashboardData.large;
+        const list = document.querySelector("[data-dashboard-funds]");
+        const label = document.querySelector("[data-dashboard-label]");
+        const avg = document.querySelector("[data-dashboard-avg]");
+        const sharpe = document.querySelector("[data-dashboard-sharpe]");
+        const count = document.querySelector("[data-dashboard-count]");
+        if (!list || !label || !avg || !sharpe || !count) return;
+
+        label.textContent = `Top Performers - ${data.label}`;
+        avg.textContent = data.avg;
+        sharpe.textContent = data.sharpe;
+        count.textContent = data.count;
+
+        list.innerHTML = data.funds.map((fund, index) => {
+          const rankClass = index === 0 ? "rank-1" : index === 1 ? "rank-2" : "rank-3";
+          const fill = Math.max(8, Math.min(100, fund.score));
+          return `
+            <div class="dp-fund ${rankClass}">
+              <span class="dp-rank">#${index + 1}</span>
+              <div class="dp-fund-info">
+                <strong>${fund.name}</strong>
+                <span>${data.label} &middot; Score ${fund.score}</span>
+              </div>
+              <div class="dp-score-bar"><div class="dp-score-fill" style="--fill: ${fill}%"></div></div>
+            </div>
+          `;
+        }).join("");
+      }
+
+      function setDashboardCategory(key) {
+        const category = dashboardData[key] ? key : "large";
+        document.querySelectorAll(".dp-cat").forEach((item) => {
+          item.classList.toggle("active", item.dataset.category === category);
+        });
+        renderDashboardCategory(category);
+      }
+
+      document.addEventListener("click", (event) => {
+        const categoryButton = event.target.closest(".dp-cat");
+        if (!categoryButton) return;
+        setDashboardCategory(categoryButton.dataset.category);
+      });
+
+      const previewCategory = new URLSearchParams(window.location.search).get("preview");
+      setDashboardCategory(previewCategory && dashboardData[previewCategory] ? previewCategory : "large");
+    </script>
+  </body>
+</html>
